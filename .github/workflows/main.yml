@@ -19,7 +19,7 @@ jobs:
     - name: Set up Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.2.*'
+        version: '6.2.4'
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2019_64'
@@ -29,7 +29,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -G "NMake Makefiles" -DCMAKE_PREFIX_PATH=$env:QT_DIR/6.4.0/msvc2019_64 ..
+        cmake -G "NMake Makefiles" ..
       shell: cmd
 
     - name: Build
@@ -41,7 +41,7 @@ jobs:
     - name: Deploy using windeployqt
       run: |
         cd build
-        $env:QT_DIR/6.4.0/msvc2019_64/bin/windeployqt.exe --release --no-compiler-runtime --no-opengl-sw --no-angle --no-quick-import --no-system-d3d-compiler --no-virtualkeyboard Countdown.exe
+        $env:QT_DIR/6.2.4/msvc2019_64/bin/windeployqt.exe --release --no-opengl-sw --no-angle --no-quick-import --no-system-d3d-compiler --no-virtualkeyboard Countdown.exe
       shell: pwsh
 
     - name: Package
@@ -54,4 +54,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: windows-build
-        path: countdown_windows
+        path: countdown_windows.zip

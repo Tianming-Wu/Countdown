@@ -1,0 +1,25 @@
+{
+	"BUILD_DIR" : "/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/Countdown_autogen",
+	"CMAKE_BINARY_DIR" : "/home/tianming/Documents/Qt/Countdown/build/unknown-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/tianming/Documents/Qt/Countdown/build/unknown-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/tianming/Documents/Qt/Countdown",
+	"CMAKE_SOURCE_DIR" : "/home/tianming/Documents/Qt/Countdown",
+	"GENERATOR" : "Unix Makefiles",
+	"INCLUDE_DIR" : "/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/Countdown_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/tianming/Documents/Qt/Countdown/calendar.png",
+		"/home/tianming/Documents/Qt/Countdown/settings.png",
+		"/home/tianming/Documents/Qt/Countdown/icon.png"
+	],
+	"LOCK_FILE" : "/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/Countdown_autogen.dir/AutoRcc_rs_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "rs" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_rs.cpp",
+	"RCC_EXECUTABLE" : "/usr/lib/qt6/libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/Countdown_autogen.dir/AutoRcc_rs_EWIEGA46WW_Used.txt",
+	"SOURCE" : "/home/tianming/Documents/Qt/Countdown/rs.qrc",
+	"VERBOSITY" : 0
+}
