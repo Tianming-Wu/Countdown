@@ -10,31 +10,13 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        arch: [x86_64, aarch64]
-        exclude:
-          - os: windows-latest
-            arch: aarch64
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Qt (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: '6.4.0'
-        host: 'linux'
-        target: 'desktop'
-        arch: ${{ matrix.arch }}
-        dir: "$HOME/Qt/6.4.0"
-
-    - name: Set up Qt (Windows)
-      if: matrix.os == 'windows-latest'
+    - name: Set up Qt
       uses: jurplel/install-qt-action@v2
       with:
         version: '6.4.0'
@@ -43,35 +25,51 @@ jobs:
         arch: 'win64_msvc2019_64'
         dir: "$env:QT_DIR"
 
-    - name: Build (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        mkdir build
-        cd build
-        cmake -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=$HOME/Qt/6.4.0/$QT_HOST_ARCH ..
-        make
-      env:
-        QT_HOST_ARCH: ${{ matrix.arch == 'x86_64' && 'gcc_64' || 'gcc_arm64' }}
-
-    - name: Build (Windows)
-      if: matrix.os == 'windows-latest'
+    - name: Configure CMake
       run: |
         mkdir build
         cd build
         cmake -G "NMake Makefiles" -DCMAKE_PREFIX_PATH=$env:QT_DIR/6.4.0/msvc2019_64 ..
-        nmake
+      shell: cmd
 
-    - name: Package (Windows)
-      if: matrix.os == 'windows-latest'
+    - name: Build
       run: |
         cd build
-        cpack -G ZIP
-      env:
-        PATH: $env:QT_DIR/6.4.0/msvc2019_64/bin;$PATH
+        nmake
+      shell: cmd
 
-    - name: Upload Artifact (Windows)
-      if: matrix.os == 'windows-latest'
+    - name: Deploy using windeployqt
+      run: |
+        cd build
+        $env:QT_DIR/6.4.0/msvc2019_64/bin/windeployqt.exe --release --no-compiler-runtime --no-opengl-sw --no-angle --no-quick-import --no-system-d3d-compiler --no-virtualkeyboard .\Countdown.exe
+      shell: pwsh
+
+    - name: Package
+      run: |
+        cd build
+        powershell Compress-Archive -Path * -DestinationPath ../Countdown_windows_x86_64.zip
+      shell: pwsh
+
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: windows-build
-        path: build/*.zip
+        path: Countdown_windows_x86_64.zip
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Countdown_windows_x86_64.zip
+        asset_name: Countdown_windows_x86_64.zip
+        asset_content_type: application/zip
