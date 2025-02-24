@@ -40,7 +40,8 @@ jobs:
     - name: Deploy using windeployqt
       run: |
         cd build
-        $env:QT_DIR/6.2.4/msvc2019_64/bin/windeployqt.exe --release --no-opengl-sw --no-angle --no-quick-import --no-system-d3d-compiler --no-virtualkeyboard Countdown.exe
+        ls
+        windeployqt --release --no-opengl-sw --no-angle --no-quick-import --no-system-d3d-compiler --no-virtualkeyboard Countdown.exe
       shell: pwsh
 
     - name: Package
