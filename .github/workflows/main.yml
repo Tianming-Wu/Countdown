@@ -28,7 +28,7 @@ jobs:
     - name: Configure CMake
       run: |
         mkdir build
-        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+        cmake -S . -B ./build
       shell: cmd
 
     - name: Build
@@ -39,15 +39,15 @@ jobs:
 
     - name: Deploy using windeployqt
       run: |
-        cd build
+        cd build/Debug
         ls
-        windeployqt --release --no-opengl-sw --no-angle --no-quick-import --no-system-d3d-compiler --no-virtualkeyboard Countdown.exe
+        windeployqt --release Countdown.exe
       shell: pwsh
 
     - name: Package
       run: |
-        cd build
-        powershell Compress-Archive -Path * -DestinationPath ../countdown_windows.zip
+        cd build/Debug
+        powershell Compress-Archive -Path * -DestinationPath ../../countdown_windows.zip
       shell: pwsh
 
     - name: Upload Artifact
