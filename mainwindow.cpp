@@ -11,13 +11,9 @@ MainWindow::MainWindow(QWidget *parent)
     //this->setWindowFlags(Qt::Tool);
     this->setWindowFlags(Qt::FramelessWindowHint);
     //this->setAttribute(Qt::WA_TranslucentBackground);
-    //ui->widget->setAttribute(Qt::WA_TranslucentBackground, false);
 
-    // QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect;
-    // effect->setBlurRadius(20);
-    // effect->setOffset(0);
-    // effect->setColor(QColor(0, 0, 0, 160));
-    // ui->widget->setGraphicsEffect(effect);
+    QRect screenGeometry = QApplication::primaryScreen()->geometry();
+    this->move(screenGeometry.width()-this->width()-15, 15);
 
     cfg.beginGroup("app");
     QDate tdate = cfg.value("TargetDate", QDate(2025,6,7)).toDate();
@@ -41,8 +37,16 @@ MainWindow::MainWindow(QWidget *parent)
     trayicon->setToolTip("Countdown");
     trayicon->setContextMenu(traymenu);
 
-    QAction *acQuit = new QAction("Quit", trayicon);
+    QAction *acQuit = new QAction("Quit", traymenu);
+    QAction *acRfPos = new QAction("Re move", traymenu);
     connect(acQuit, &QAction::triggered, this, [=](){this->close();});
+    connect(acRfPos, &QAction::triggered, this, [=](){
+        QRect screenGeometry = QApplication::primaryScreen()->geometry();
+        this->move(screenGeometry.width()-this->width()-15, 15);
+    });
+
+    traymenu->addAction(acRfPos);
+    traymenu->addSeparator();
     traymenu->addAction(acQuit);
 
     trayicon->show();

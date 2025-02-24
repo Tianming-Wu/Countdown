@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QSettings>
 #include <QGraphicsDropShadowEffect>
+#include <QScreen>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
