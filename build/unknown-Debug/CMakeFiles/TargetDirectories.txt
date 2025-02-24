@@ -1,0 +1,9 @@
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/Countdown.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/edit_cache.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/rebuild_cache.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/list_install_components.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/install.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/install/local.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/install/strip.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/Countdown_autogen_timestamp_deps.dir
+/home/tianming/Documents/Qt/Countdown/build/unknown-Debug/CMakeFiles/Countdown_autogen.dir
