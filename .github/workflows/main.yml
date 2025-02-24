@@ -31,7 +31,7 @@ jobs:
         host: 'linux'
         target: 'desktop'
         arch: ${{ matrix.arch }}
-        dir: "$HOME/Qt6.4.0"
+        dir: "$HOME/Qt/6.4.0"
 
     - name: Set up Qt (Windows)
       if: matrix.os == 'windows-latest'
@@ -48,8 +48,10 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=$HOME/Qt6.4.0/6.4.0/gcc_64 ..
+        cmake -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=$HOME/Qt/6.4.0/$QT_HOST_ARCH ..
         make
+      env:
+        QT_HOST_ARCH: ${{ matrix.arch == 'x86_64' && echo 'gcc_64' || echo 'gcc_arm64' }}
 
     - name: Build (Windows)
       if: matrix.os == 'windows-latest'
