@@ -47,7 +47,7 @@
     <widget class="QPushButton" name="settings">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>278</x>
        <y>110</y>
        <width>25</width>
        <height>25</height>
@@ -62,10 +62,6 @@
      <property name="text">
       <string/>
      </property>
-     <property name="icon">
-      <iconset resource="rs.qrc">
-       <normaloff>:/imp/settings.png</normaloff>:/imp/settings.png</iconset>
-     </property>
      <property name="iconSize">
       <size>
        <width>25</width>
@@ -76,7 +72,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label_Day">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -115,12 +111,12 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="labelName">
      <property name="geometry">
       <rect>
        <x>19</x>
        <y>9</y>
-       <width>131</width>
+       <width>291</width>
        <height>21</height>
       </rect>
      </property>
@@ -150,7 +146,7 @@
      </property>
      <property name="dateTime">
       <datetime>
-       <hour>0</hour>
+       <hour>8</hour>
        <minute>0</minute>
        <second>0</second>
        <year>2025</year>
@@ -182,11 +178,15 @@
       <bool>true</bool>
      </property>
     </widget>
+    <zorder>label_Day</zorder>
+    <zorder>count</zorder>
+    <zorder>labelName</zorder>
+    <zorder>dateEdit</zorder>
+    <zorder>btnTranslucent</zorder>
+    <zorder>settings</zorder>
    </widget>
   </widget>
  </widget>
- <resources>
-  <include location="rs.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

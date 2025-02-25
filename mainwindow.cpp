@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //this->setWindowFlags(Qt::Tool);
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+    this->setAttribute(Qt::WA_QuitOnClose);
     //this->setAttribute(Qt::WA_TranslucentBackground);
 
     QRect screenGeometry = QApplication::primaryScreen()->geometry();
@@ -17,12 +17,24 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFixedHeight(150);
 
     cfg.beginGroup("app");
-    QDate tdate = cfg.value("TargetDate", QDate(2025,6,7)).toDate();
-    bool translucent = cfg.value("Translucent", false).toBool();
+        QDate tdate = cfg.value("TargetDate", QDate(2025,6,7)).toDate();
+        bool translucent = cfg.value("Translucent", false).toBool();
+
+        if(!cfg.contains("TargetName")) cfg.setValue("TargetName", "高考");
+        QString text = "距离" + cfg.value("TargetName", "高考").toString() + "还剩:";
+    cfg.endGroup();
+
+    cfg.beginGroup("widget");
+        if(!cfg.contains("Stylesheet"))
+            cfg.setValue("Stylesheet", ".widget{ background-color: white; border-radius: 10px; }");
+        QString stylesheet = cfg.value("Stylesheet").toString();
+    cfg.endGroup();
 
     onDateChange(tdate);
     ui->btnTranslucent->setChecked(translucent);
     if(translucent) this->setAttribute(Qt::WA_TranslucentBackground);
+    ui->labelName->setText(text);
+    ui->widget->setStyleSheet(stylesheet);
 
     ui->dateEdit->hide();
     ui->btnTranslucent->hide();
@@ -40,18 +52,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->dateEdit, &QDateEdit::userDateChanged, this, &MainWindow::onDateChange);
 
     connect(ui->btnTranslucent, &QPushButton::toggled, this, [=](bool checked) {
+        cfg.beginGroup("app");
         cfg.setValue("Translucent", checked);
-        if(checked) {
-            this->setAttribute(Qt::WA_TranslucentBackground);
-        } else {
-            this->setAttribute(Qt::WA_TranslucentBackground, false);
-        }
+        cfg.endGroup();
     });
 
     trayicon = new QSystemTrayIcon(this);
     traymenu = new QMenu(this);
 
-    trayicon->setIcon(QIcon(":/imp/calendar.png"));
+    trayicon->setIcon(QIcon(":/imp/settings.png"));
     trayicon->setToolTip("Countdown");
     trayicon->setContextMenu(traymenu);
 
@@ -78,6 +87,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::onDateChange(QDate date)
 {
+    cfg.beginGroup("app");
     cfg.setValue("TargetDate", date);
+    cfg.endGroup();
     ui->count->setText(QString::number(QDate::currentDate().daysTo(date)));
 }
