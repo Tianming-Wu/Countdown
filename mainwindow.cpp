@@ -57,8 +57,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 #ifdef _WIN64
     QAction *acOpen = new QAction("Config", traymenu);
-    connect(acQuit, &QAction::triggered, this, [=](){
-        QProcess::startDetached("explorer", "/select,consistent.ini");
+    connect(acOpen, &QAction::triggered, this, [=](){
+        QProcess::startDetached("explorer", QStringList("/select,consistent.ini"));
     });
     traymenu->addAction(acOpen);
     traymenu->addSeparator();
