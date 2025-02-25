@@ -1,0 +1,91 @@
+# This is a basic workflow that is manually triggered
+
+name: Compile & Publish Release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      version:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Version identifier'
+        required: true
+        type: string
+      intro:
+        description: 'Introduction to release'
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.2.4'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2019_64'
+        aqtversion: "==3.2.*"
+
+    - name: Configure CMake
+      run: |
+        mkdir build
+        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+      shell: cmd
+
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config=Release
+      shell: cmd
+
+    - name: Deploy using windeployqt
+      run: |
+        cd build/Release
+        ls
+        windeployqt Countdown.exe
+      shell: pwsh
+
+    - name: Package
+      run: |
+        cd build/Release
+        powershell Compress-Archive -Path * -DestinationPath ../../countdown_windows.zip
+      shell: pwsh
+      
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: windows-build
+        path: .
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: countdown_windows.zip
+        asset_name: countdown_windows_x86_64_dep.zip
+        asset_content_type: application/zip
