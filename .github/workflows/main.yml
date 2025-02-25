@@ -34,7 +34,7 @@ jobs:
     - name: Build
       run: |
         cd build
-        cmake --build . -DCMAKE_BUILD_TYPE=Release
+        cmake --build . --preset=Release
       shell: cmd
 
     - name: Deploy using windeployqt
