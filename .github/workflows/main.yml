@@ -41,7 +41,7 @@ jobs:
       run: |
         cd build/Debug
         ls
-        windeployqt --release Countdown.exe
+        windeployqt Countdown.exe
       shell: pwsh
 
     - name: Package
