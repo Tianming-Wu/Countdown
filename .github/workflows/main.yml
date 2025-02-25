@@ -34,19 +34,19 @@ jobs:
     - name: Build
       run: |
         cd build
-        cmake --build .
+        cmake --build . -DCMAKE_BUILD_TYPE=Release
       shell: cmd
 
     - name: Deploy using windeployqt
       run: |
-        cd build/Debug
+        cd build/Release
         ls
         windeployqt Countdown.exe
       shell: pwsh
 
     - name: Package
       run: |
-        cd build/Debug
+        cd build/Release
         powershell Compress-Archive -Path * -DestinationPath ../../countdown_windows.zip
       shell: pwsh
 
