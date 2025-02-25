@@ -28,13 +28,13 @@ jobs:
     - name: Configure CMake
       run: |
         mkdir build
-        cmake -S . -B ./build
+        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
       shell: cmd
 
     - name: Build
       run: |
         cd build
-        cmake --build . --preset=Release
+        cmake --build . --config=Release
       shell: cmd
 
     - name: Deploy using windeployqt
