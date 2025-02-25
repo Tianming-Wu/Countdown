@@ -12,9 +12,9 @@ on:
         required: false
         type: string
       prerel:
-    	description: 'Pre-Release' 
-	required: true
-	type: boolean
+    	  description: 'Pre-Release' 
+	      required: true
+	      type: boolean
 
 
 jobs:
