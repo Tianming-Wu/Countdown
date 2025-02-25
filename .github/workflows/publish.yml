@@ -11,10 +11,10 @@ on:
         description: 'Introduction to release'
         required: false
         type: string
-    	  prerel:
-    	  	description: 'Pre-Release' 
-		required: true
-		type: boolean
+      prerel:
+    	description: 'Pre-Release' 
+	required: true
+	type: boolean
 
 
 jobs:
@@ -91,5 +91,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: countdown_windows.zip
-        asset_name: countdown_windows_x86_64_dep.zip
+        asset_name: countdown_windows_x86_64.zip
         asset_content_type: application/zip
