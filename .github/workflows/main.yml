@@ -46,7 +46,7 @@ jobs:
 
     - name: Package
       run: |
-        cp ../autorun.reg Release/
+        cp autorun.reg build/Release/
         cd build/Release
         powershell Compress-Archive -Path * -DestinationPath ../../countdown_windows.zip
       shell: pwsh
