@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     cfg.beginGroup("widget");
         if(!cfg.contains("Stylesheet"))
-            cfg.setValue("Stylesheet", ".widget{ background-color: white; border-radius: 10px; }");
+            cfg.setValue("Stylesheet", ".QWidget{ background-color: white; border-radius: 10px; }");
         QString stylesheet = cfg.value("Stylesheet").toString();
     cfg.endGroup();
 
@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->btnTranslucent->setChecked(translucent);
     if(translucent) this->setAttribute(Qt::WA_TranslucentBackground);
     ui->labelName->setText(text);
-    ui->widget->setStyleSheet(stylesheet);
+    ui->centralwidget->setStyleSheet(stylesheet);
 
     ui->dateEdit->hide();
     ui->btnTranslucent->hide();

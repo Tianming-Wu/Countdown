@@ -10,6 +10,12 @@
     <height>183</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>323</width>
+    <height>183</height>
+   </size>
+  </property>
   <property name="contextMenuPolicy">
    <enum>Qt::NoContextMenu</enum>
   </property>
@@ -17,173 +23,139 @@
    <string/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QLabel" name="labelName">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>323</width>
-      <height>184</height>
+      <x>19</x>
+      <y>9</y>
+      <width>291</width>
+      <height>21</height>
      </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>323</width>
-      <height>150</height>
-     </size>
     </property>
     <property name="maximumSize">
      <size>
-      <width>323</width>
-      <height>184</height>
+      <width>16777215</width>
+      <height>21</height>
      </size>
     </property>
-    <property name="styleSheet">
-     <string notr="true">.widget {
-	background-color: white;
-	border-radius: 10px;
-}</string>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
-    <widget class="QPushButton" name="settings">
-     <property name="geometry">
-      <rect>
-       <x>278</x>
-       <y>110</y>
-       <width>25</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+    <property name="text">
+     <string>距离高考还剩：</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>110</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="dateTime">
+     <datetime>
+      <hour>0</hour>
+      <minute>0</minute>
+      <second>0</second>
+      <year>2025</year>
+      <month>6</month>
+      <day>7</day>
+     </datetime>
+    </property>
+    <property name="date">
+     <date>
+      <year>2025</year>
+      <month>6</month>
+      <day>7</day>
+     </date>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnTranslucent">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>150</y>
+      <width>25</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tr</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="count">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>40</y>
+      <width>201</width>
+      <height>96</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>64</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>999</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_Day">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>110</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>天</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="settings">
+    <property name="geometry">
+     <rect>
+      <x>278</x>
+      <y>110</y>
+      <width>25</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
 	background: transparent;
 	border: none
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>25</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_Day">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>110</y>
-       <width>21</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>天</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="count">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>40</y>
-       <width>201</width>
-       <height>96</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>64</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>999</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="labelName">
-     <property name="geometry">
-      <rect>
-       <x>19</x>
-       <y>9</y>
-       <width>291</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>21</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>距离高考还剩：</string>
-     </property>
-    </widget>
-    <widget class="QDateEdit" name="dateEdit">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>150</y>
-       <width>110</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <property name="dateTime">
-      <datetime>
-       <hour>8</hour>
-       <minute>0</minute>
-       <second>0</second>
-       <year>2025</year>
-       <month>6</month>
-       <day>7</day>
-      </datetime>
-     </property>
-     <property name="date">
-      <date>
-       <year>2025</year>
-       <month>6</month>
-       <day>7</day>
-      </date>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btnTranslucent">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>150</y>
-       <width>25</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Tr</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <zorder>label_Day</zorder>
-    <zorder>count</zorder>
-    <zorder>labelName</zorder>
-    <zorder>dateEdit</zorder>
-    <zorder>btnTranslucent</zorder>
-    <zorder>settings</zorder>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>25</width>
+      <height>25</height>
+     </size>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
  </widget>
