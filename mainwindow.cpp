@@ -4,7 +4,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , cfg("./consistent.ini", QSettings::IniFormat, this)
+    , cfg(QApplication::applicationDirPath() + "/consistent.ini", QSettings::IniFormat, this)
 {
     ui->setupUi(this);
 
