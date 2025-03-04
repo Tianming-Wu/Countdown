@@ -47,6 +47,7 @@ jobs:
     - name: Package
       run: |
         cp autorun.reg build/Release/
+        cp autorun_registry.bat build/Release/
         cd build/Release
         powershell Compress-Archive -Path * -DestinationPath ../../countdown_windows.zip
       shell: pwsh
@@ -54,5 +55,5 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: windows-build
+        name: countdown-windows-build
         path: countdown_windows.zip
