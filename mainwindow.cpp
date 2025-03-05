@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , cfg(QApplication::applicationDirPath() + "/consistent.ini", QSettings::IniFormat, this)
+    , timer(new QTimer(this))
 {
     ui->setupUi(this);
 
@@ -17,20 +18,25 @@ MainWindow::MainWindow(QWidget *parent)
     this->setFixedHeight(150);
 
     cfg.beginGroup("app");
-        QDate tdate = cfg.value("TargetDate", QDate(2025,6,7)).toDate();
-        bool translucent = cfg.value("Translucent", false).toBool();
+        if(!cfg.contains("TargetDate")) cfg.setValue("TargetDate", QDate(2025,6,7));
+        tdate = cfg.value("TargetDate").toDate();
 
-        if(!cfg.contains("TargetName")) cfg.setValue("TargetName", "高考");
-        QString text = "距离" + cfg.value("TargetName", "高考").toString() + "还剩:";
+        if(!cfg.contains("Translucent")) cfg.setValue("Translucent", true);
+        bool translucent = cfg.value("Translucent").toBool();
+
+        if(!cfg.contains("TargetString")) cfg.setValue("TargetString", "距离高考还剩：");
+        QString text = cfg.value("TargetString").toString();
+
+        if(!cfg.contains("Timer")) cfg.setValue("Timer", true);
+        etimer = cfg.value("Timer").toBool();
     cfg.endGroup();
 
     cfg.beginGroup("widget");
         if(!cfg.contains("Stylesheet"))
-            cfg.setValue("Stylesheet", ".QWidget{ background-color: white; border-radius: 10px; }");
+            cfg.setValue("Stylesheet", ".QWidget{ background-color: rgba(255,255,255,180); border-radius: 10px; } .QLabel{ color: black; } .QPushButton:checked{ color: green; }");
         QString stylesheet = cfg.value("Stylesheet").toString();
     cfg.endGroup();
 
-    onDateChange(tdate);
     ui->btnTranslucent->setChecked(translucent);
     if(translucent) this->setAttribute(Qt::WA_TranslucentBackground);
     ui->labelName->setText(text);
@@ -78,6 +84,9 @@ MainWindow::MainWindow(QWidget *parent)
     traymenu->addAction(acQuit);
 
     trayicon->show();
+
+    if(etimer) connect(timer, &QTimer::timeout, this, &MainWindow::onDateChange);
+    onDateChange();
 }
 
 MainWindow::~MainWindow()
@@ -85,10 +94,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onDateChange(QDate date)
+void MainWindow::onDateChange()
+{
+    ui->count->setText(QString::number(QDate::currentDate().daysTo(tdate)));
+    if(etimer) startTimer();
+}
+
+void MainWindow::onUserDateChange(QDate date)
 {
     cfg.beginGroup("app");
     cfg.setValue("TargetDate", date);
     cfg.endGroup();
-    ui->count->setText(QString::number(QDate::currentDate().daysTo(date)));
+    tdate = date;
+    onDateChange();
+}
+
+void MainWindow::startTimer()
+{
+    QDateTime now = QDateTime::currentDateTime();
+    QDateTime nextMidnight = QDateTime(now.date().addDays(1), QTime(0,0,0,100));
+
+    qint64 msecsToMidnight = now.msecsTo(nextMidnight);
+
+    timer->start(msecsToMidnight);
 }

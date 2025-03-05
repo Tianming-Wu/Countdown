@@ -9,6 +9,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QScreen>
 #include <QProcess>
+#include <QTimer>
 // #include <QPropertyAnimation>
 
 QT_BEGIN_NAMESPACE
@@ -26,12 +27,20 @@ public:
     ~MainWindow();
 
 public slots:
-    void onDateChange(QDate);
+    void onUserDateChange(QDate);
+    void onDateChange();
+
+private:
+    void startTimer();
 
 private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *trayicon;
     QMenu *traymenu;
     QSettings cfg;
+    QTimer *timer;
+
+    bool etimer;
+    QDate tdate;
 };
 #endif // MAINWINDOW_H
