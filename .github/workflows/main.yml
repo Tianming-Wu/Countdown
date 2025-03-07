@@ -138,7 +138,7 @@ jobs:
         
       - name: Install Dependencies
         run: |
-          sudo apt install -y cmake qt6-base-dev qt6-wayland-dev clang
+          sudo apt install -y cmake qt6-base-dev qt6-wayland-dev clang --fix-missing
         shell: pwsh
         
       - name: Configure CMake
