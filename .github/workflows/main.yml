@@ -1,59 +1,148 @@
 name: Build and Package
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+  # push:
+    # branches:
+      # - master
+  # pull_request:
+    # branches:
+      # - master
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Version name (default is ref name)'
+
+env:
+  # ${{ env.VERSION }} is used by release scripts
+  VERSION: ${{ github.event.inputs.name || github.ref_name }}
 
 jobs:
-  build:
+  build-windows-x86_64:
     runs-on: windows-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Qt
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: '6.2.4'
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win64_msvc2019_64'
-        aqtversion: "==3.2.*"
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.2.4'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          aqtversion: "==3.2.*"
 
-    - name: Configure CMake
-      run: |
-        mkdir build
-        cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
-      shell: cmd
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+        shell: cmd
 
-    - name: Build
-      run: |
-        cd build
-        cmake --build . --config=Release
-      shell: cmd
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config=Release
+        shell: cmd
 
-    - name: Deploy using windeployqt
-      run: |
-        cd build/Release
-        ls
-        windeployqt Countdown.exe
-      shell: pwsh
+      - name: Deploy Dependencies
+        run: |
+          cd build/Release
+          ls
+          windeployqt Countdown.exe
+        shell: pwsh
 
-    - name: Package
-      run: |
-        cp autorun.reg build/Release/
-        cp autorun_registry.bat build/Release/
-        cd build/Release
-        powershell Compress-Archive -Path * -DestinationPath ../../countdown_windows.zip
-      shell: pwsh
+      - name: Package
+        run: |
+          cp autorun.reg build/Release/
+          cp autorun_registry.bat build/Release/
+          cd build/Release
+          powershell Compress-Archive -Path * -DestinationPath ../../countdown-windows-${{ env.VERSION }}-x86_64.zip
+        shell: pwsh
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: countdown-windows-build
-        path: countdown_windows.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: countdown-windows-x86_64
+          path: countdown-windows-${{ env.VERSION }}-x86_64.zip
+
+
+  build-ubuntu-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check architecture
+          run: |
+              arch=$(uname -m)
+              if [[ "$arch" != x86_64 ]]
+              then
+                  echo "Unexpected architecture: $arch" >&2
+                  exit 1
+              fi
+    
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y cmake qt6-base-dev qt6-wayland-dev clang
+        shell: pwsh
+        
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+        shell: pwsh
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config=Release
+        shell: pwsh
+        
+      # - name: Tar
+        # run: |
+          # mkdir release/ubuntu-x86_64
+          # tar -C .. -cvf dist.tar.gz build/Countdown
+      
+      - name: Package
+        run: |
+          mkdir release/ubuntu-x86_64
+          mv build/Countdown release/ubuntu-x86_64/countdown-ubuntu-${{ env.VERSION }}-x86_64
+        
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: countdown-ubuntu-x86_64
+          path: release/ubuntu-x86_64/countdown-ubuntu-${{ env.VERSION }}-x86_64
+    
+    
+  release:
+    needs:
+      - build-windows-x86_64
+      - build-ubuntu-x86_64
+      # - build-ubuntu-aarch64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Directory Init
+        run: |
+          mkdir release/releases
+      
+      - name: Download Windows x86_64
+        uses: actions/download-artifact@v4
+        with:
+          name: countdown-windows-x86_64
+          path: release/releases/
+          
+      - name: Download Ubuntu x86_64
+        uses: actions/download-artifact@v4
+        with:
+          name: countdown-ubuntu-x86_64
+          path: release/releases/
+          
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: countdown-all-release-${{ env.VERSION }}
+          path: release/releases
