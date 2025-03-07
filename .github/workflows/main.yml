@@ -105,14 +105,14 @@ jobs:
       
       - name: Package
         run: |
-          mkdir release/ubuntu-x86_64
-          mv build/Countdown release/ubuntu-x86_64/countdown-ubuntu-${{ env.VERSION }}-x86_64
+          mkdir release
+          mv build/Countdown release/countdown-ubuntu-${{ env.VERSION }}-x86_64
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: countdown-ubuntu-x86_64
-          path: release/ubuntu-x86_64/countdown-ubuntu-${{ env.VERSION }}-x86_64
+          path: release/countdown-ubuntu-${{ env.VERSION }}-x86_64
     
     
   release:
@@ -127,6 +127,7 @@ jobs:
         
       - name: Directory Init
         run: |
+          mkdir release
           mkdir release/releases
       
       - name: Download Windows x86_64
