@@ -9,12 +9,19 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+#ifdef _WIN64
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     this->setAttribute(Qt::WA_QuitOnClose);
-    //this->setAttribute(Qt::WA_TranslucentBackground);
+#else
+    this->setWindowFlags(Qt::FramelessWindowHint); // On Ubuntu, if xcb enabled, Qt::Tool blocks window creation.
+#endif
 
     QRect screenGeometry = QApplication::primaryScreen()->geometry();
+#ifdef _WIN64
     this->move(screenGeometry.width()-this->width()-15, 15);
+#else
+    this->move(screenGeometry.width()-this->width()-15, 45); // On Ubuntu, goes down a little bit to prevent collition with title bar.
+#endif
     this->setFixedHeight(150);
 
     cfg.beginGroup("app");
@@ -73,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef _WIN64
     QAction *acOpen = new QAction("Config", traymenu);
     connect(acOpen, &QAction::triggered, this, [=](){
-        QProcess::startDetached("explorer", QStringList(QString("/select," + QString(QApplication::applicationDirPath() + "/consistent.ini"))));
+        QProcess::startDetached("explorer", QStringList(QString("/select," + QApplication::applicationDirPath() + "consistent.ini")));
     });
     traymenu->addAction(acOpen);
     traymenu->addSeparator();
