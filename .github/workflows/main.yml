@@ -110,6 +110,7 @@ jobs:
           
       - name: Package
         run: |
+          mkdir release
           cd build
           Compress-Archive -Path Countdown -DestinationPath ../release/countdown-ubuntu-${{ env.VERSION }}-x86_64.zip
         shell: pwsh
