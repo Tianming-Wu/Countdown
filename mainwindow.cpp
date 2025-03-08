@@ -5,7 +5,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , cfg(QApplication::applicationDirPath() + "/consistent.ini", QSettings::IniFormat, this)
-    , timer(new QTimer(this))
 {
     ui->setupUi(this);
 
@@ -17,12 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
 #endif
 
     QRect screenGeometry = QApplication::primaryScreen()->geometry();
+    QPoint winpos;
 #ifdef _WIN64
-    this->move(screenGeometry.width()-this->width()-15, 15);
+    winpos = QPoint(screenGeometry.width()-this->width()-15, 15);
 #else
-    this->move(screenGeometry.width()-this->width()-15, 45); // On Ubuntu, goes down a little bit to prevent collition with title bar.
+    winpos = QPoint(screenGeometry.width()-this->width()-15, 45); // On Ubuntu, goes down a little bit to prevent collition with title bar.
 #endif
-    this->setFixedHeight(150);
+    this->move(winpos);
 
     cfg.beginGroup("app");
         if(!cfg.contains("TargetDate")) cfg.setValue("TargetDate", QDate(2025,6,7));
@@ -36,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent)
 
         if(!cfg.contains("Timer")) cfg.setValue("Timer", true);
         etimer = cfg.value("Timer").toBool();
+
+        if(!cfg.contains("Animation")) cfg.setValue("Animation", true);
+        bool animation = cfg.value("Animation").toBool();
     cfg.endGroup();
 
     cfg.beginGroup("widget");
@@ -48,17 +51,20 @@ MainWindow::MainWindow(QWidget *parent)
     if(translucent) this->setAttribute(Qt::WA_TranslucentBackground);
     ui->labelName->setText(text);
     ui->centralwidget->setStyleSheet(stylesheet);
+    if(etimer) timer = new QTimer(this);
 
-    ui->dateEdit->hide();
-    ui->btnTranslucent->hide();
+    // ui->dateEdit->hide();
+    // ui->btnTranslucent->hide();
 
     connect(ui->settings, &QPushButton::toggled, this, [=](bool checked) {
         if(checked) {
-            this->setFixedHeight(184);
-            ui->dateEdit->show(); ui->btnTranslucent->show();
+            if(animation) pa_expand->start();
+            else this->setFixedHeight(184);
+            // ui->dateEdit->show(); ui->btnTranslucent->show();
         } else {
-            this->setFixedHeight(150);
-            ui->dateEdit->hide(); ui->btnTranslucent->hide();
+            if(animation) pa_shrink->start();
+            else this->setFixedHeight(150);
+            // ui->dateEdit->hide(); ui->btnTranslucent->hide();
         }
     });
 
@@ -69,6 +75,30 @@ MainWindow::MainWindow(QWidget *parent)
         cfg.setValue("Translucent", checked);
         cfg.endGroup();
     });
+
+    connect(ui->labelAbout, &QLabel::linkActivated, this, [=](QString s) {
+        QMessageBox::aboutQt(nullptr, s);
+    });
+
+    if(animation) {
+        pa_appear = new QPropertyAnimation(this, "pos", this);
+        pa_expand = new QPropertyAnimation(this, "geometry", this);
+        pa_shrink = new QPropertyAnimation(this, "geometry", this);
+
+        pa_appear->setStartValue(QPoint(winpos.x(), winpos.y()-180));
+        pa_appear->setEndValue(winpos);
+        pa_appear->setEasingCurve(QEasingCurve::OutCubic);
+
+        pa_expand->setStartValue(QRect(winpos, QSize(323, 150)));
+        pa_expand->setEndValue(QRect(winpos, QSize(323, 183)));
+        pa_expand->setEasingCurve(QEasingCurve::OutCubic);
+        pa_expand->setDuration(200);
+
+        pa_shrink->setStartValue(QRect(winpos, QSize(323, 183)));
+        pa_shrink->setEndValue(QRect(winpos, QSize(323, 150)));
+        pa_shrink->setEasingCurve(QEasingCurve::InCubic);
+        pa_shrink->setDuration(200);
+    }
 
     trayicon = new QSystemTrayIcon(this);
     traymenu = new QMenu(this);
@@ -94,6 +124,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     if(etimer) connect(timer, &QTimer::timeout, this, &MainWindow::onDateChange);
     onDateChange();
+
+    if(animation) pa_appear->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 MainWindow::~MainWindow()

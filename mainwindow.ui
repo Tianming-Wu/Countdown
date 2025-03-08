@@ -7,13 +7,25 @@
     <x>0</x>
     <y>0</y>
     <width>323</width>
-    <height>183</height>
+    <height>150</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>323</width>
+    <height>150</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>323</width>
     <height>183</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>323</width>
+    <height>150</height>
    </size>
   </property>
   <property name="contextMenuPolicy">
@@ -58,7 +70,7 @@
     </property>
     <property name="dateTime">
      <datetime>
-      <hour>0</hour>
+      <hour>8</hour>
       <minute>0</minute>
       <second>0</second>
       <year>2025</year>
@@ -155,6 +167,28 @@
     </property>
     <property name="checkable">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelAbout">
+    <property name="geometry">
+     <rect>
+      <x>215</x>
+      <y>150</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;About&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;By Tianming&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::RichText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="openExternalLinks">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

@@ -10,7 +10,8 @@
 #include <QScreen>
 #include <QProcess>
 #include <QTimer>
-// #include <QPropertyAnimation>
+#include <QPropertyAnimation>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -42,5 +43,7 @@ private:
 
     bool etimer;
     QDate tdate;
+
+    QPropertyAnimation *pa_appear, *pa_expand, *pa_shrink;
 };
 #endif // MAINWINDOW_H
