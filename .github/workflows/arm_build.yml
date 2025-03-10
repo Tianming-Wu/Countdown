@@ -50,8 +50,9 @@ jobs:
           
       - name: Package
         run: |
+          mkdir release
           cd build
-          Compress-Archive -Path Countdown -DestinationPath ../countdown-ubuntu-${{ env.VERSION }}-aarch64.zip
+          Compress-Archive -Path Countdown -DestinationPath ../release/countdown-ubuntu-${{ env.VERSION }}-aarch64.zip
         shell: pwsh
         
       - name: Upload Artifact
