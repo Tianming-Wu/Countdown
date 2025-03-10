@@ -1,0 +1,61 @@
+name: Build and Package (Ubuntu arm64)
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Version name (default is ref name)'
+
+env:
+  # ${{ env.VERSION }} is used by release scripts
+  VERSION: ${{ github.event.inputs.name || github.ref_name }}
+
+jobs:
+      # - name: Tar
+        # run: |
+          # mkdir release/ubuntu-x86_64
+          # tar -C .. -cvf dist.tar.gz build/Countdown
+
+  build-ubuntu-aarch64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Check architecture
+        run: |
+            arch=$(uname -m)
+            if [[ "$arch" != aarch64 ]]
+            then
+                echo "Unexpected architecture: $arch" >&2
+                exit 1
+            fi
+    
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: Install Dependencies
+        run: |
+          sudo apt install -y cmake qt6-base-dev qt6-wayland-dev clang --fix-missing || true
+        shell: pwsh
+        
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release
+        shell: pwsh
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config=Release
+        shell: pwsh
+          
+      - name: Package
+        run: |
+          cd build
+          Compress-Archive -Path Countdown -DestinationPath ../countdown-ubuntu-${{ env.VERSION }}-aarch64.zip
+        shell: pwsh
+        
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: countdown-ubuntu-aarch64
+          path: release/countdown-ubuntu-${{ env.VERSION }}-aarch64.zip
