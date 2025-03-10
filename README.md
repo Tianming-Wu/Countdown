@@ -35,19 +35,15 @@ You can find it in the program directory after launching it for the very first t
 The default stylesheet in config:
 ```ini
 [widget]
-Stylesheet=".QWidget{ background-color: white; border-radius: 10px; } .QLabel{ color:black }"
-```
-
-To get a better visual effect, it's suggested to edit it like this:
-```ini
-[widget]
-Stylesheet=".QWidget{ background-color: rgba(255,255,255,180); border-radius: 10px; } .QLabel{ color:black }"
+Stylesheet=".QWidget{ background-color: rgba(255,255,255,180); border-radius: 10px; } .QLabel{ color: black; } .QPushButton:checked{ color: green; }"
 ```
 The format is acturally qss. Check [Qt Online Help Document (EN)](https://doc.qt.io/qt-6/stylesheet.html), [csdn(1)](https://blog.csdn.net/zwcslj/article/details/140154933) or [csdn(2)](https://blog.csdn.net/martian665/article/details/142520397) for more details.
 
 The base widget's name is `centralwidget`. **Note** that almost all components are children of QWidget, so you should use `.QWidget` instead of `QWidget` if you don't want to adapt it to everything. Check for names in ui file. For a more friendly interaction, try qtcreator or designer.
 
+If you want to customize it without learning qss, give this to AI with your requirements.:
+`帮我写一个qss文件，要求包含在一行以内。程序是一个Qt倒计时牌，背景 QWidget centralwidget, 标题 QLabel labelName, 内容为 QLabel label_Day, 主窗口背景透明。示例文件为 ".QWidget{ background-color: rgba(255,255,255,180); border-radius: 10px; } .QLabel{ color: black; } .QPushButton:checked{ color: green; }" 我的要求是……`
+
 
 # Known issues
-- (Ubuntu) Cannot position itself topright (Wayland, gnome-tweaks:center new windows).
 - (Ubuntu) Cannot hide its icon in the task bar.
