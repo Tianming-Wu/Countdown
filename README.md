@@ -3,6 +3,8 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Tianming-Wu/Countdown/main.yml)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Tianming-Wu/Countdown)
 
+[Latest Release](https://github.com/Tianming-Wu/Countdown/releases/latest)
+
 ![Ubuntu](https://github.com/user-attachments/assets/dafc5caf-3cbd-4c77-a459-6f04da13829c)
 
 
