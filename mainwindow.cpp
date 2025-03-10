@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->move(winpos);
 
     cfg.beginGroup("app");
-        if(!cfg.contains("TargetDate")) cfg.setValue("TargetDate", QDate(2025,6,7));
-        tdate = cfg.value("TargetDate").toDate();
+        if(!cfg.contains("TargetDate")) cfg.setValue("TargetDate", QDate(2025,6,7).toString(Qt::ISODate));
+        tdate = QDate::fromString(cfg.value("TargetDate").toString(), Qt::ISODate);
 
         if(!cfg.contains("Translucent")) cfg.setValue("Translucent", true);
         bool translucent = cfg.value("Translucent").toBool();
@@ -142,7 +142,7 @@ void MainWindow::onDateChange()
 void MainWindow::onUserDateChange(QDate date)
 {
     cfg.beginGroup("app");
-    cfg.setValue("TargetDate", date);
+    cfg.setValue("TargetDate", date.toString(Qt::ISODate));
     cfg.endGroup();
     tdate = date;
     onDateChange();
