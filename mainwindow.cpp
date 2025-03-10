@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
     });
 
-    connect(ui->dateEdit, &QDateEdit::userDateChanged, this, &MainWindow::onDateChange);
+    connect(ui->dateEdit, &QDateEdit::userDateChanged, this, &MainWindow::onUserDateChange);
 
     connect(ui->btnTranslucent, &QPushButton::toggled, this, [=](bool checked) {
         cfg.beginGroup("app");
