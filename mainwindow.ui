@@ -35,7 +35,7 @@
    <string/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="labelName">
+   <widget class="GradientLabel" name="labelName">
     <property name="geometry">
      <rect>
       <x>19</x>
@@ -70,7 +70,7 @@
     </property>
     <property name="dateTime">
      <datetime>
-      <hour>8</hour>
+      <hour>0</hour>
       <minute>0</minute>
       <second>0</second>
       <year>2025</year>
@@ -102,7 +102,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="count">
+   <widget class="GradientLabel" name="count">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -123,7 +123,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_Day">
+   <widget class="GradientLabel" name="label_Day">
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -193,6 +193,13 @@
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GradientLabel</class>
+   <extends>QLabel</extends>
+   <header>gradientlabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

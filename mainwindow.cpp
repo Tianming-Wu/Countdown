@@ -43,8 +43,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     cfg.beginGroup("widget");
         if(!cfg.contains("Stylesheet"))
-            cfg.setValue("Stylesheet", ".QWidget{ background-color: rgba(255,255,255,180); border-radius: 10px; } .QLabel{ color: black; } .QPushButton:checked{ color: green; }");
+            cfg.setValue("Stylesheet", ".QWidget{ background-color: rgba(255,255,255,180); border-radius: 10px; } QLabel{ color: black; } .QPushButton:checked{ color: green; }");
         QString stylesheet = cfg.value("Stylesheet").toString();
+
+        if(!cfg.contains("gradient_enabled"))
+            cfg.setValue("gradient_enabled", false);
+        bool gradientEnabled = cfg.value("gradient_enabled", false).toBool();
+
+        if(!cfg.contains("gradient_colors"))
+            cfg.setValue("gradient_colors", "#FF0000:0,#FF3300:0.08,#FF6600:0.16,#FF9900:0.25,#FFCC00:0.33,#FFFF00:0.41,#99FF00:0.5,#33FF00:0.58,#00FF66:0.66,#00FFFF:0.75,#0066FF:0.83,#CC00FF:0.91,#FF00FF:1");
+        QString gradientStops = cfg.value("gradient_colors").toString();
+
+        if(!cfg.contains("gradient_angle"))
+            cfg.setValue("gradient_angle", 30);
+        int angle = cfg.value("gradient_angle", 30).toInt();
+
+        if(!cfg.contains("gradient_labels"))
+            cfg.setValue("gradient_labels", "count");
+        QStringList gradientLabels = cfg.value("gradient_labels")
+                                         .toString().split(',', Qt::SkipEmptyParts);
     cfg.endGroup();
 
     ui->btnTranslucent->setChecked(translucent);
@@ -52,6 +69,28 @@ MainWindow::MainWindow(QWidget *parent)
     ui->labelName->setText(text);
     ui->centralwidget->setStyleSheet(stylesheet);
     if(etimer) timer = new QTimer(this);
+
+    // 应用渐变效果
+    if(gradientEnabled) {
+        foreach (QString labelName, gradientLabels) {
+            GradientLabel *label = findChild<GradientLabel*>(labelName);
+            if (label) {
+                label->setGradientEnabled(true);
+                label->setGradientAngle(angle);
+
+                if (!gradientStops.isEmpty()) {
+                    QGradientStops stops;
+                    foreach (QString stop, gradientStops.split(',')) {
+                        QStringList parts = stop.split(':');
+                        if (parts.size() == 2) {
+                            stops << QGradientStop(parts[1].toDouble(), QColor(parts[0]));
+                        }
+                    }
+                    label->setGradientStops(stops);
+                }
+            }
+        }
+    }
 
     // ui->dateEdit->hide();
     // ui->btnTranslucent->hide();
@@ -71,9 +110,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->dateEdit, &QDateEdit::userDateChanged, this, &MainWindow::onUserDateChange);
 
     connect(ui->btnTranslucent, &QPushButton::toggled, this, [=](bool checked) {
-        cfg.beginGroup("app");
-        cfg.setValue("Translucent", checked);
-        cfg.endGroup();
+        cfg.setValue("app/Translucent", checked);
     });
 
     connect(ui->labelAbout, &QLabel::linkActivated, this, [=](QString s) {
