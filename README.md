@@ -16,7 +16,7 @@ By default, it counts to 2025.6.7, the University entrance exam in China.
 
 # Features
 - Customizable title, date and graphical effect.
-- Auto refresh at 12:00 (current timezone).
+- Auto refresh at 00:00 (current timezone).
 
 
 # Configuration
